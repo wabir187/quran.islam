@@ -1,5 +1,5 @@
 name: quran_app
-description: "WABIR Quran Gateway - Stable Build"
+description: "WABIR Quran Gateway - Premium App"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -16,14 +16,11 @@ dependencies:
   shared_preferences: ^2.2.2
   adhan: ^2.1.0
   geolocator: ^11.0.0
-  # جلب المكتبة مباشرة من GitHub لتجاوز أخطاء التحميل
-  flutter_qibla:
-    git:
-      url: https://github.com/medyas/flutter_qibla.git
+  flutter_qibla: ^0.7.1
   google_fonts: ^6.1.0
   intl: ^0.19.0
   http: ^1.2.0
-  flutter_local_notifications: ^17.0.0
+  flutter_local_notifications: ^16.3.3
   timezone: ^0.9.2
 
 dev_dependencies:
