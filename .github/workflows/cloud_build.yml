@@ -22,6 +22,18 @@ jobs:
         with:
           channel: 'stable'
 
+      - name: Recreate Android Project
+        run: |
+          # العثور على مجلد المشروع
+          PROJECT_ROOT=$(find . -name pubspec.yaml -exec dirname {} \;)
+          cd "$PROJECT_ROOT"
+          
+          # إعادة إنشاء ملفات الأندرويد المفقودة أو القديمة آلياً
+          flutter create . --platforms android --org com.wabir.quran
+          
+          # التأكد من قبول التراخيص
+          yes | flutter doctor --android-licenses || true
+
       - name: Build APK
         run: |
           PROJECT_ROOT=$(find . -name pubspec.yaml -exec dirname {} \;)
