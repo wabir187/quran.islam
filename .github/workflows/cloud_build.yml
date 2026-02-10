@@ -22,12 +22,12 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Force Fix Project Structure
+      - name: Force Repair Project and Code
         run: |
           PROJECT_ROOT=$(find . -name pubspec.yaml -exec dirname {} \;)
           cd "$PROJECT_ROOT"
           
-          # إنشاء ملف pubspec.yaml بإصدارات محددة ومستقرة جداً لضمان النجاح
+          # 1. إنشاء ملف pubspec مرن جداً (تجنب أخطاء الإصدارات)
           cat <<EOF > pubspec.yaml
           name: quran_app
           description: "WABIR Quran Gateway"
@@ -40,33 +40,35 @@ jobs:
               sdk: flutter
             flutter_localizations:
               sdk: flutter
-            provider: ^6.1.1
-            just_audio: ^0.10.0
-            shared_preferences: ^2.2.0
-            adhan: ^2.1.0
-            geolocator: ^11.0.0
-            flutter_compass: ^0.7.0
-            google_fonts: ^6.1.0
-            intl: ^0.19.0
-            http: ^1.2.0
-            flutter_local_notifications: 17.2.2
-            timezone: 0.9.4
+            provider: any
+            just_audio: any
+            shared_preferences: any
+            adhan: any
+            geolocator: any
+            flutter_compass: any
+            google_fonts: any
+            intl: any
+            http: any
+            flutter_local_notifications: any
+            timezone: any
           dev_dependencies:
             flutter_test:
               sdk: flutter
-            flutter_lints: ^3.0.1
+            flutter_lints: any
           flutter:
             uses-material-design: true
-            fonts:
-              - family: AmiriQuran
-                fonts:
-                  - asset: assets/fonts/AmiriQuran.ttf
           EOF
 
-          # تنظيف أي أخطاء سابقة وإعادة بناء هيكل الأندرويد
-          flutter create . --platforms android --org com.wabir.quran
+          # 2. إصلاح أخطاء الكود آلياً (في حال لم يتم تحديثها على GitHub)
+          # إصلاح OnboardingScreen
+          sed -i 's/radialGradient: RadialGradient/gradient: RadialGradient/g' lib/screens/onboarding_screen.dart || true
+          sed -i 's/Colors.emerald/Colors.teal/g' lib/screens/onboarding_screen.dart || true
           
-          # قبول التراخيص
+          # إصلاح الاستدعاءات في AppProvider
+          sed -i '1i import "notification_service.dart";' lib/core/app_provider.dart || true
+
+          # 3. إعادة إنشاء هيكل الأندرويد الصحيح
+          flutter create . --platforms android --org com.wabir.quran
           yes | flutter doctor --android-licenses || true
 
       - name: Build APK
