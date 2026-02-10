@@ -22,20 +22,45 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Clean and Fix Project
+      - name: Force Fix Project Structure
         run: |
+          # العثور على المجلد والبدء من الصفر
           PROJECT_ROOT=$(find . -name pubspec.yaml -exec dirname {} \;)
           cd "$PROJECT_ROOT"
           
-          # حذف المكتبة المسببة للمشاكل برمجياً لضمان عدم وجودها
-          sed -i '/flutter_qibla/d' pubspec.yaml
-          
-          # إضافة المكتبة البديلة المستقرة
-          if ! grep -q "flutter_compass" pubspec.yaml; then
-            sed -i '/dependencies:/a \  flutter_compass: any' pubspec.yaml
-          fi
-          
-          # إعادة إنشاء ملفات الأندرويد لضمان التوافق
+          # إنشاء ملف pubspec.yaml جديد ونظيف تماماً لضمان عدم وجود تعارضات
+          cat <<EOF > pubspec.yaml
+          name: quran_app
+          description: "WABIR Quran Gateway"
+          publish_to: 'none'
+          version: 1.0.0+1
+          environment:
+            sdk: '>=3.0.0 <4.0.0'
+          dependencies:
+            flutter:
+              sdk: flutter
+            flutter_localizations:
+              sdk: flutter
+            provider: any
+            just_audio: any
+            shared_preferences: any
+            adhan: any
+            geolocator: any
+            flutter_compass: any
+            google_fonts: any
+            intl: any
+            http: any
+            flutter_local_notifications: any
+            timezone: any
+          dev_dependencies:
+            flutter_test:
+              sdk: flutter
+            flutter_lints: any
+          flutter:
+            uses-material-design: true
+          EOF
+
+          # إعادة إنشاء ملفات الأندرويد لدمج الإعدادات الجديدة
           flutter create . --platforms android --org com.wabir.quran
           
           # قبول التراخيص
