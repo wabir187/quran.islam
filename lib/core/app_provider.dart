@@ -7,8 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:adhan/adhan.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'notification_service.dart';
 
 class AppProvider extends ChangeNotifier {
+
   // --- Audio Player ---
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;

@@ -10,6 +10,8 @@ class NotificationService {
     tz_data.initializeTimeZones();
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    
+    // إصلاح دالة initialize لتكون متوافقة مع الإصدار الجديد
     await _notificationsPlugin.initialize(initializationSettings);
   }
 
