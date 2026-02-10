@@ -22,22 +22,30 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Recreate Android Project
+      - name: Clean and Fix Project
         run: |
-          # العثور على مجلد المشروع
           PROJECT_ROOT=$(find . -name pubspec.yaml -exec dirname {} \;)
           cd "$PROJECT_ROOT"
           
-          # إعادة إنشاء ملفات الأندرويد المفقودة أو القديمة آلياً
+          # حذف المكتبة المسببة للمشاكل برمجياً لضمان عدم وجودها
+          sed -i '/flutter_qibla/d' pubspec.yaml
+          
+          # إضافة المكتبة البديلة المستقرة
+          if ! grep -q "flutter_compass" pubspec.yaml; then
+            sed -i '/dependencies:/a \  flutter_compass: any' pubspec.yaml
+          fi
+          
+          # إعادة إنشاء ملفات الأندرويد لضمان التوافق
           flutter create . --platforms android --org com.wabir.quran
           
-          # التأكد من قبول التراخيص
+          # قبول التراخيص
           yes | flutter doctor --android-licenses || true
 
       - name: Build APK
         run: |
           PROJECT_ROOT=$(find . -name pubspec.yaml -exec dirname {} \;)
           cd "$PROJECT_ROOT"
+          flutter pub cache clean --force
           flutter pub get
           flutter build apk --release
 
