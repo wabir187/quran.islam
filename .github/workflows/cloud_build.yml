@@ -20,17 +20,18 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0' # استخدام نسخة محددة ومستقرة
           channel: 'stable'
 
       - name: Build APK
         run: |
-          # البحث عن مجلد المشروع
+          # البحث عن المجلد
           PROJECT_ROOT=$(find . -name pubspec.yaml -exec dirname {} \;)
           cd "$PROJECT_ROOT"
           
-          # تنظيف شامل قبل البناء
-          rm -f pubspec.lock
+          echo "--- Checking pubspec.yaml content ---"
+          cat pubspec.yaml
+          
+          # البدء بالبناء
           flutter pub cache clean --force
           flutter pub get
           flutter build apk --release
