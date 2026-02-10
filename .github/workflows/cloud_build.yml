@@ -24,15 +24,8 @@ jobs:
 
       - name: Build APK
         run: |
-          # البحث عن المجلد
           PROJECT_ROOT=$(find . -name pubspec.yaml -exec dirname {} \;)
           cd "$PROJECT_ROOT"
-          
-          echo "--- Checking pubspec.yaml content ---"
-          cat pubspec.yaml
-          
-          # البدء بالبناء
-          flutter pub cache clean --force
           flutter pub get
           flutter build apk --release
 
